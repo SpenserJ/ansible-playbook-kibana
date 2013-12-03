@@ -4,7 +4,7 @@
 - name: ensure python-software-properties is installed
   apt: pkg=python-software-properties
 - name: ensure app apt dependencies are installed
-  apt: pkg=$item state=installed
+  apt: pkg={{ item }} state=installed
   with_items:
     - openjdk-7-jre
     - redis-server
@@ -13,7 +13,7 @@
   file: path=/opt/logstash state=directory owner=root group=root mode=0755
 
 - name: ensure subdirectories exist
-  file: path=/opt/logstash/$item owner=root group=root mode=0755 state=directory
+  file: path=/opt/logstash/{{ item }} owner=root group=root mode=0755 state=directory
   with_items:
     - bin
     - etc
@@ -29,7 +29,7 @@
   file: path=/var/log/logstash owner=root group=root mode=0755 state=directory
 
 - name: ensure we have the specified logstash release
-  get_url: url=${logstash_url} dest=/opt/logstash/share/${logstash_file}
+  get_url: url={{ logstash_url }} dest=/opt/logstash/share/{{ logstash_file }}
 
 - name: ensure symlink with no version exists at /opt/logstash/share/logstash.jar
-  file: src=/opt/logstash/share/${logstash_file} dest=/opt/logstash/share/logstash.jar state=link
+  file: src=/opt/logstash/share/{{ logstash_file }} dest=/opt/logstash/share/logstash.jar state=link
