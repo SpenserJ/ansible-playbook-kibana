@@ -4,7 +4,7 @@
 - name: ensure python-software-properties is installed
   apt: pkg=python-software-properties
 - name: ensure app apt dependencies are installed
-  apt: pkg=$item state=installed
+  apt: pkg={{ item }} state=installed
   with_items:
     - git
     - nginx
