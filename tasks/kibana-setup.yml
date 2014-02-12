@@ -1,16 +1,20 @@
 ---
-- name: ensure apt cache is up to date
-  apt: update_cache=yes
-- name: ensure python-software-properties is installed
-  apt: pkg=python-software-properties
-- name: ensure app apt dependencies are installed
-  apt: pkg=$item state=installed
-  with_items:
-    - git
-    - nginx
+#- name: ensure apt cache is up to date
+#  apt: update_cache=yes
+#- name: ensure python-software-properties is installed
+#  apt: pkg=python-software-properties
+#- name: ensure app apt dependencies are installed
+#  apt: pkg=$item state=installed
+#  with_items:
+#    - git
+#    - nginx
 
 - name: ensure we have the specified logstash release
   git: repo=https://github.com/elasticsearch/kibana.git dest=/var/www/kibana update=yes
+- name: ensure kibana is set up to proxy elasticsearch
+  lineinfile: "dest=/var/www/kibana/src/config.js
+               regexp='elasticsearch: '
+               line='    elasticsearch: \"http://\"+window.location.hostname,'"
 - name: ensure kibana nginx site is in place
   template: src=../files/kibana/kibana.conf.j2 dest=/etc/nginx/sites-available/kibana mode=0755
 - name: ensure default Nginx site is not enabled

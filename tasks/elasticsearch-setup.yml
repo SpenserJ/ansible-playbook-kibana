@@ -14,3 +14,8 @@
 - name: ensure elasticsearch is installed
   shell: dpkg -i /tmp/elasticsearch-${es_version}.deb creates=/etc/elasticsearch
   notify: restart elasticsearch
+- name: Make elasticsearch listen on a local ipv4
+  lineinfile: "dest=/etc/elasticsearch/elasticsearch.yml
+               regexp='network.host:'
+               line='network.host: _lo:ipv4_'"
+  notify: restart elasticsearch

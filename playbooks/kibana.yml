@@ -1,6 +1,6 @@
 ---
 - hosts: central-logging
-  user: ubuntu
+  user: spenser
   sudo: yes
 
   vars_files:

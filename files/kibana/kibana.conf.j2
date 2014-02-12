@@ -1,7 +1,7 @@
 server {
   listen 80;
   server_name logs.notprod.pl;
-  root /var/www/kibana;
+  root /var/www/kibana/src;
 
   # Set image format types to expire in a very long time
   location ~* ^.+\.(jpg|jpeg|gif|png|ico)$ {
@@ -15,14 +15,14 @@ server {
       expires max;
   }
 
+  location ~ ^/(_aliases|_nodes|.*/(_search|_mapping)|kibana-int/(dashboard/|temp).*)$ {
+    proxy_pass         http://127.0.0.1:9200;
+    proxy_read_timeout 90;
+    expires -1;
+  }
+
   # Catchall for everything else
   location / {
-    root /var/www/kibana;
-    index index.html;
-    expires 1d;
-    try_files $uri/ $uri;
-    if (-f $request_filename) {
-      break;
-    }
+    index index.html index.htm;
   }
 }
